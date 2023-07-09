@@ -1,0 +1,21 @@
+###
+# Регистрация пользователя
+POST localhost:8081/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "First",
+  "email": "First@yandex.ru",
+  "password": "111"
+}
+
+###
+# Аутентификауия пользователя
+POST localhost:8081/api/auth/signin
+Content-Type: application/json
+
+{
+  "username": "First",
+  "email": "First@yandex.ru",
+  "password": "111"
+}

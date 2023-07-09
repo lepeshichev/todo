@@ -1,0 +1,36 @@
+###
+# Создание категории
+POST localhost:8081/categories
+Content-Type: application/json
+
+{
+  "name": "Категория 1",
+  "user": {
+    "id": 1
+  }
+}
+
+###
+# Переименование категории
+PUT localhost:8081/categories
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Переименование категории",
+  "user": {
+    "id": 1
+  }
+}
+
+###
+# Получение списка категорий
+GET localhost:8081/categories
+
+###
+# Получение категории по id
+GET localhost:8081/categories/1
+
+###
+# Удаление категории по id
+DELETE localhost:8081/categories?idCategory=1
