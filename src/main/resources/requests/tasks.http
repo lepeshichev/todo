@@ -1,0 +1,60 @@
+###
+# Добавление задачи
+POST http://localhost:8081/tasks
+Content-Type: application/json
+
+{
+  "title": "Таска 1",
+  "description": "Первая",
+  "timestampDate": "1999-01-08 04:05:06",
+  "category": {
+    "id": 1
+  },
+  "status": {
+    "id": 1
+  },
+  "priority": {
+    "id": 1
+  }
+}
+
+###
+# Изменение задачи
+PUT http://localhost:8081/tasks
+Content-Type: application/json
+
+{
+  "id" : 1,
+  "title": "Теперь это таска 2",
+  "description": "Вторая",
+  "taskStartTime": "1999-01-08 04:05:06",
+  "category": {
+    "id": 1
+  },
+  "status": {
+    "id": 1
+  },
+  "priority": {
+    "id": 1
+  }
+}
+
+###
+# Получение задач пользователя по его id
+GET localhost:8081/tasks?userId=1
+
+###
+# Получение задач пользователя по id категории
+GET localhost:8081/tasks/categories?categoryId=2
+
+###
+# Получение всех статусов задач
+GET http://localhost:8081/tasks/statuses
+
+###
+# Получение всех приоритетов задач
+GET http://localhost:8081/tasks/priorities
+
+###
+# Как будем удалять?
+DELETE localhost:8081/tasks
