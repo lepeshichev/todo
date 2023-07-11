@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface TaskService {
 
-    long save(Task task);
+    Long createTask(Task task);
 
-    boolean update(Task task);
+    boolean updateTask(Task task);
 
-    boolean delete(long taskId);
+    boolean deleteTaskById(long taskId);
 
-    List<Task> findAll();
+    List<Task> isNotify(long userId);
 
-    List<Task> findByCategory(long categoryId);
+    List<Task> findAll(long userId);
 
-    List<Task> isNotify();
+    List<Task> findAllByCategoryId(long categoryId);
 }

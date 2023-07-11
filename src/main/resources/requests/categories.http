@@ -16,20 +16,19 @@ PUT localhost:8081/categories
 Content-Type: application/json
 
 {
-  "id": 1,
+  "id": 2,
   "name": "Переименование категории",
   "user": {
     "id": 1
   }
 }
 
-###
-# Получение списка категорий
-GET localhost:8081/categories
+
 
 ###
 # Получение категории по id
 GET localhost:8081/categories/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGaXJzdCIsImlhdCI6MTY4OTEwMTkwNiwiZXhwIjoxNjg5MTg4MzA2fQ.Lmm2QCMJxd0eYZIFikGzcd3OgRZqGwmduXYxDlftNpE
 
 ###
 # Удаление категории по id

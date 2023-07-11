@@ -83,11 +83,19 @@ public class AuthController {
         User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
 
+        Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
-        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Роль не найдена"));
-        roles.add(userRole);
+        if (strRoles == null) {
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Роль не найдена"));
+            roles.add(userRole);
+        } else {
+
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Роль не найдена"));
+            roles.add(userRole);
+        }
 
         user.setRoles(roles);
         userRepository.save(user);

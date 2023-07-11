@@ -27,7 +27,7 @@ Content-Type: application/json
   "id" : 1,
   "title": "Теперь это таска 2",
   "description": "Вторая",
-  "taskStartTime": "1999-01-08 04:05:06",
+  "taskEndTime": "1999-01-08 04:05:06",
   "category": {
     "id": 1
   },

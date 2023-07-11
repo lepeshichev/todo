@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import ru.sber.todo.entities.priorities.Priority;
 import ru.sber.todo.entities.statuses.Status;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tasks")
@@ -27,7 +27,7 @@ public class Task {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    Date taskStartTime;
+    LocalDateTime taskEndTime;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -40,4 +40,5 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "priority_id", nullable = false)
     Priority priority;
+
 }

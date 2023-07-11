@@ -4,11 +4,10 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import ru.sber.todo.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import ru.sber.todo.security.services.UserDetailsImpl;
 
 import java.security.Key;
 import java.util.Date;
@@ -47,21 +46,19 @@ public class JwtUtils {
                 .getSubject();
     }
 
-    public void validateJwtToken(String authToken) {
-        log.info(authToken);
-        if (authToken == null) {
-            throw new BadCredentialsException("Не передан JWT-токен");
-        }
+    public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
+            return true;
         } catch (MalformedJwtException e) {
-            throw new BadCredentialsException("Недопустимый JWT-токен", e);
+            log.error("Недопустимый JWT-токен: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
-            throw new BadCredentialsException("Срок действия JWT-токена истек", e);
+            log.error("Срок действия JWT-токена истек: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            throw new BadCredentialsException("JWT-токен не поддерживается", e);
+            log.error("JWT-токен не поддерживается: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new BadCredentialsException("Пустая строка у JWT-токена", e);
+            log.error("Пустая строка у JWT-токена: {}", e.getMessage());
         }
+        return false;
     }
 }

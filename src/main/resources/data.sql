@@ -10,3 +10,4 @@ insert into todo_lav.priorities (name)
 values ('HIGH');
 insert into todo_lav.priorities (name)
 values ('VERY_HIGH');
+
