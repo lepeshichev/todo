@@ -6,9 +6,9 @@ Content-Type: application/json
 {
   "title": "Таска 1",
   "description": "Первая",
-  "timestampDate": "1999-01-08 04:05:06",
+  "taskEndTime": "1999-01-08 04:05:06",
   "category": {
-    "id": 1
+    "id": 5
   },
   "status": {
     "id": 1

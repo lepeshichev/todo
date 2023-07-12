@@ -48,6 +48,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "bin_id", referencedColumnName = "id")
+    private Bin bin;
+
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
