@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Header } from "antd/es/layout/layout";
-import { Button, Menu, Card, Input, Checkbox, Collapse } from "antd";
+import { Button, Menu, Card, Input, Checkbox, Collapse, message } from "antd";
 import React, { useState } from 'react';
 import { FolderOutlined, DeleteOutlined, SnippetsOutlined, EditOutlined } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,7 +10,7 @@ const { Panel } = Collapse;
 
 const MyTasksPage = () => {
     const navigate = useNavigate();
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed] = useState(false);
     const [showAddCategory, setShowAddCategory] = useState(false);
     const [categoryName, setCategoryName] = useState('');
     const [subTasks, setSubTasks] = useState([]);
@@ -42,6 +42,12 @@ const MyTasksPage = () => {
         setSubTasks(updatedSubTasks);
     };
 
+    const handleSubTaskDeleteChange = (e, index) => {
+        const updatedSubTasks = [...subTasks];
+        updatedSubTasks.splice(index, 1);
+        setSubTasks(updatedSubTasks);
+    };
+
     const handleSaveCategory = () => {
         const newCategory = { id: uuidv4(), name: categoryName, subTasks: subTasks };
         if (editingCategoryIndex !== -1) {
@@ -66,15 +72,18 @@ const MyTasksPage = () => {
     };
 
     const handleDeleteCategory = (index) => {
+        const deletedCategory = categories[index];
         const updatedCategories = [...categories];
         updatedCategories.splice(index, 1);
         setCategories(updatedCategories);
+        navigate('/workspace/bin', { state: { deletedCategory } });
     };
 
     const handleDeleteSubTask = (categoryIndex, subTaskIndex) => {
         const updatedCategories = [...categories];
         updatedCategories[categoryIndex].subTasks.splice(subTaskIndex, 1);
         setCategories(updatedCategories);
+        message.info("Задача удалена!");
     };
 
     const handleToggleCardContent = (categoryId) => {
@@ -97,7 +106,7 @@ const MyTasksPage = () => {
     return (
         <div>
             <Header
-                style={{ display: 'flex', alignItems: 'center', backgroundColor: "#423189"}}
+                style={{ display: 'flex', alignItems: 'center', backgroundColor: "#423189" }}
             >
                 <img
                     src={require("../images/head_owl.png")}
@@ -114,7 +123,8 @@ const MyTasksPage = () => {
                     type="primary"
                     style={{
                         color: "whitesmoke",
-                        left: "35%"
+                        left: "35%",
+                        margin: "10"
                     }}
                     onClick={handleAddCategory}
                 >
@@ -150,7 +160,7 @@ const MyTasksPage = () => {
                         <p>Архив</p>
                     </Menu.Item>
                     <Menu.Item icon={<DeleteOutlined />} onClick={() => navigate("/workspace/bin")}>
-                        <p>Удалённое</p>
+                        <p>Корзина</p>
                     </Menu.Item>
                 </Menu>
             </Header>
@@ -158,7 +168,7 @@ const MyTasksPage = () => {
             {showAddCategory && (
                 <Card
                     title={editingCategoryIndex !== -1 ? "Редактировать категорию" : "Добавить категорию"}
-                    style={{ width: 400, margin: "0 auto", marginTop: 20 }}
+                    style={{ width: 400, margin: "0 auto", marginTop: 20, borderColor: "black" }}
                 >
                     <Input
                         value={categoryName}
@@ -172,24 +182,30 @@ const MyTasksPage = () => {
                             <Input
                                 value={subTask.title}
                                 onChange={(e) => handleSubTaskTitleChange(e, index)}
-                                placeholder="Название таски"
+                                placeholder="Название вложенной задачи"
                                 style={{ marginBottom: 10, overflow: "hidden", textOverflow: "ellipsis" }}
                             />
                             <TextArea
                                 value={subTask.description}
                                 onChange={(e) => handleSubTaskDescriptionChange(e, index)}
-                                placeholder="Описание таски"
+                                placeholder="Описание вложенной задачи"
                                 autoSize={{ minRows: 2, maxRows: 6 }}
                                 style={{ marginBottom: 10, overflow: "hidden", textOverflow: "ellipsis" }}
                             />
-                            <Checkbox>
-                                Завершено
-                            </Checkbox>
+                            <Checkbox>Завершено</Checkbox>
+                            <Button
+                                type="primary"
+                                danger
+                                shape="circle"
+                                icon={<DeleteOutlined />}
+                                size="small"
+                                onClick={(e) => handleSubTaskDeleteChange(e, index)}
+                            />
                         </Card>
                     ))}
 
-                    <Button type="primary" onClick={handleAddSubTask} style={{ margin: 15 }}>
-                        Добавить таску
+                    <Button type="primary" onClick={handleAddSubTask} style={{ margin: 10 }}>
+                        Добавить задачу
                     </Button>
 
                     <Button type="primary" onClick={handleSaveCategory}>
@@ -198,10 +214,10 @@ const MyTasksPage = () => {
                 </Card>
             )}
 
-            <div style={{ display: "flex", flexWrap: "wrap", marginTop: 10, position: "absolute", left: "25%"}}>
+            <div style={{ display: "flex", flexWrap: "wrap", marginTop: 10, position: "absolute", left: "25%" }}>
                 {categories.map((category, index) => (
-                    <Card key={index} style={{ width: 300, margin: 10 }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <Card key={index} style={{ width: 300, margin: 10, borderColor: "black" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderColor: "black" }}>
                             <h3 style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{category.name}</h3>
                             <div>
                                 <Button
@@ -210,6 +226,13 @@ const MyTasksPage = () => {
                                     icon={<EditOutlined />}
                                     size="small"
                                     onClick={() => handleEditCategory(index)}
+                                    style={{ marginRight: 10 }}
+                                />
+                                <Button
+                                    type="primary"
+                                    shape="circle"
+                                    icon={<FolderOutlined />}
+                                    size="small"
                                     style={{ marginRight: 10 }}
                                 />
                                 <Button
@@ -230,15 +253,17 @@ const MyTasksPage = () => {
                             <Panel header="Содержимое категории" key="content">
                                 {category.subTasks.map((subTask, subIndex) => (
                                     <Card key={subIndex} style={{ marginBottom: 10 }}>
-                                        <h4 style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-                                            {subTask.title}
-                                        </h4>
-                                        <p style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-                                            {subTask.description}
-                                        </p>
-                                        <Checkbox>
-                                            Завершено
-                                        </Checkbox>
+                                        <h4 style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{subTask.title}</h4>
+                                        <p style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{subTask.description}</p>
+                                        <Checkbox>Завершено</Checkbox>
+                                        <Button
+                                            type="primary"
+                                            danger
+                                            shape="circle"
+                                            icon={<DeleteOutlined />}
+                                            size="small"
+                                            onClick={() => handleDeleteSubTask(index, subIndex)}
+                                        />
                                     </Card>
                                 ))}
                             </Panel>
@@ -248,6 +273,6 @@ const MyTasksPage = () => {
             </div>
         </div>
     );
-}
+};
 
 export default MyTasksPage;
